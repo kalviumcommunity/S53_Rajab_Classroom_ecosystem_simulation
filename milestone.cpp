@@ -3,75 +3,95 @@
 using namespace std;
 
 // Base class
-class Participant {
+class Participant
+{
 protected:
     string name;
     int energyLevel;
 
 public:
-    Participant(string name, int energyLevel) {
-        // Using 'this' to distinguish between the member variable and the constructor parameter
+    Participant(string name = "Unnamed", int energyLevel = 100)
+    {
         this->name = name;
         this->energyLevel = energyLevel;
     }
 
-    // Method to simulate resting
-    Participant* rest() {
-        this->energyLevel += 10; // Using 'this' to refer to the instance's energyLevel
+    void rest()
+    {
+        this->energyLevel += 10;
         cout << this->name << " is resting. Energy level is now " << this->energyLevel << "." << endl;
-        return this; // Returning 'this' to allow method chaining
     }
 
-    string getName() {
-        return this->name; // Using 'this' to return the object's name
+    string getName()
+    {
+        return this->name;
     }
 };
 
 // Derived class - Student
-class Student : public Participant {
+class Student : public Participant
+{
 private:
     int knowledgeLevel;
 
 public:
-    Student(string name, int energyLevel, int knowledgeLevel) : Participant(name, energyLevel) {
-        // Using 'this' to distinguish between the member variable and the constructor parameter
+    Student(string name = "Unnamed", int energyLevel = 100, int knowledgeLevel = 50) : Participant(name, energyLevel)
+    {
         this->knowledgeLevel = knowledgeLevel;
     }
 
-    void study(int hours) {
-        this->knowledgeLevel += hours * 2; // Using 'this' to modify the object's knowledgeLevel
+    void study(int hours)
+    {
+        this->knowledgeLevel += hours * 2;
         this->energyLevel -= hours * 2;
         cout << this->name << " is studying for " << hours << " hours. Knowledge level is now " << this->knowledgeLevel << " and energy level is " << this->energyLevel << "." << endl;
     }
 };
 
 // Derived class - Teacher
-class Teacher : public Participant {
+class Teacher : public Participant
+{
 private:
     string subject;
 
 public:
-    Teacher(string name, int energyLevel, string subject) : Participant(name, energyLevel) {
-        this->subject = subject; // Using 'this' to distinguish between the member variable and the constructor parameter
+    Teacher(string name = "Unnamed", int energyLevel = 100, string subject = "Unknown") : Participant(name, energyLevel)
+    {
+        this->subject = subject;
     }
 
-    void teach() {
+    void teach()
+    {
         this->energyLevel -= 10;
         cout << this->name << " is teaching " << this->subject << ". Energy level is now " << this->energyLevel << "." << endl;
     }
 };
 
-int main() {
-    // Creating objects of Student and Teacher
-    Student alice("Alice", 100, 50);
-    Teacher mrJohnson("Mr. Johnson", 80, "Mathematics");
+int main()
+{
+    // Creating an array of Student objects
+    Student students[3] = {
+        Student("Alice", 100, 50),
+        Student("Bob", 100, 60),
+        Student("Carol", 90, 70)};
 
-    // Calling methods on objects
-    alice.study(3);
-    alice.rest()->rest(); // Method chaining using 'this' pointer
+    // Creating an array of Teacher objects
+    Teacher teachers[2] = {
+        Teacher("Mr. Johnson", 80, "Mathematics"),
+        Teacher("Ms. Smith", 85, "English")};
 
-    mrJohnson.teach();
-    mrJohnson.rest();
+    // Interacting with the students and teachers
+    for (int i = 0; i < 3; i++)
+    {
+        students[i].study(2);
+        students[i].rest();
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        teachers[i].teach();
+        teachers[i].rest();
+    }
 
     return 0;
 }
