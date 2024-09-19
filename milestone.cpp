@@ -3,84 +3,74 @@
 using namespace std;
 
 // Base class
-class Participant
-{
+class Participant {
 protected:
     string name;
     int energyLevel;
 
 public:
-    Participant(string n, int e) : name(n), energyLevel(e) {}
-
-    void rest()
-    {
-        energyLevel += 10;
-        cout << name << " is resting. Energy level is now " << energyLevel << "." << endl;
+    Participant(string name, int energyLevel) {
+        // Using 'this' to distinguish between the member variable and the constructor parameter
+        this->name = name;
+        this->energyLevel = energyLevel;
     }
 
-    string getName()
-    {
-        return name;
+    // Method to simulate resting
+    Participant* rest() {
+        this->energyLevel += 10; // Using 'this' to refer to the instance's energyLevel
+        cout << this->name << " is resting. Energy level is now " << this->energyLevel << "." << endl;
+        return this; // Returning 'this' to allow method chaining
+    }
+
+    string getName() {
+        return this->name; // Using 'this' to return the object's name
     }
 };
 
 // Derived class - Student
-class Student : public Participant
-{
+class Student : public Participant {
 private:
     int knowledgeLevel;
 
 public:
-    Student(string n, int e, int k) : Participant(n, e), knowledgeLevel(k) {}
-
-    void study()
-    {
-        knowledgeLevel += 5;
-        energyLevel -= 5;
-        cout << name << " is studying. Knowledge level is now " << knowledgeLevel << " and energy level is " << energyLevel << "." << endl;
+    Student(string name, int energyLevel, int knowledgeLevel) : Participant(name, energyLevel) {
+        // Using 'this' to distinguish between the member variable and the constructor parameter
+        this->knowledgeLevel = knowledgeLevel;
     }
 
-    void attendClass()
-    {
-        cout << name << " is attending class." << endl;
+    void study(int hours) {
+        this->knowledgeLevel += hours * 2; // Using 'this' to modify the object's knowledgeLevel
+        this->energyLevel -= hours * 2;
+        cout << this->name << " is studying for " << hours << " hours. Knowledge level is now " << this->knowledgeLevel << " and energy level is " << this->energyLevel << "." << endl;
     }
 };
 
 // Derived class - Teacher
-class Teacher : public Participant
-{
+class Teacher : public Participant {
 private:
     string subject;
 
 public:
-    Teacher(string n, int e, string s) : Participant(n, e), subject(s) {}
-
-    void teach()
-    {
-        energyLevel -= 10;
-        cout << name << " is teaching " << subject << ". Energy level is now " << energyLevel << "." << endl;
+    Teacher(string name, int energyLevel, string subject) : Participant(name, energyLevel) {
+        this->subject = subject; // Using 'this' to distinguish between the member variable and the constructor parameter
     }
 
-    void evaluateStudents()
-    {
-        cout << name << " is evaluating students." << endl;
+    void teach() {
+        this->energyLevel -= 10;
+        cout << this->name << " is teaching " << this->subject << ". Energy level is now " << this->energyLevel << "." << endl;
     }
 };
 
-int main()
-{
+int main() {
     // Creating objects of Student and Teacher
     Student alice("Alice", 100, 50);
     Teacher mrJohnson("Mr. Johnson", 80, "Mathematics");
 
     // Calling methods on objects
-    alice.attendClass();
-    alice.study(); //use of abstraction
-    // The user doesn't need to know how knowledge or energy is being manipulated.
-    alice.rest(); //use of polymorphism
-//allows methods to have the same name but behave differently depending on the class in which they are defined. In this case, polymorphism is evident in the different names
+    alice.study(3);
+    alice.rest()->rest(); // Method chaining using 'this' pointer
+
     mrJohnson.teach();
-    mrJohnson.evaluateStudents();
     mrJohnson.rest();
 
     return 0;
