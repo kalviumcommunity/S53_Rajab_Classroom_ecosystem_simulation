@@ -3,59 +3,99 @@
 using namespace std;
 
 // Base class
-class Participant {
+class Participant
+{
 protected:
     string name;
     int energyLevel;
 
 public:
-    Participant(string name = "Unnamed", int energyLevel = 100) {
+    Participant(string name = "Unnamed", int energyLevel = 100)
+    {
         this->name = name;
         this->energyLevel = energyLevel;
     }
 
-    void rest() {
-        energyLevel += 10;
-        cout << name << " is resting. Energy level is now " << energyLevel << "." << endl;
+    void rest()
+    {
+        this->energyLevel += 10;
+        cout << this->name << " is resting. Energy level is now " << this->energyLevel << "." << endl;
     }
 
-    string getName() const {
-        return name;
+    string getName()
+    {
+        return this->name;
     }
 };
 
 // Derived class - Student
-class Student : public Participant {
+class Student : public Participant
+{
 private:
     int knowledgeLevel;
 
 public:
-    Student(string name = "Unnamed", int energyLevel = 100, int knowledgeLevel = 50)
-        : Participant(name, energyLevel) {
+    Student(string name = "Unnamed", int energyLevel = 100, int knowledgeLevel = 50) : Participant(name, energyLevel)
+    {
         this->knowledgeLevel = knowledgeLevel;
     }
 
-    void study(int hours) {
-        knowledgeLevel += hours * 2;
-        energyLevel -= hours * 2;
-        cout << name << " is studying for " << hours << " hours. Knowledge level is now " << knowledgeLevel << " and energy level is " << energyLevel << "." << endl;
+    void study(int hours)
+    {
+        this->knowledgeLevel += hours * 2;
+        this->energyLevel -= hours * 2;
+        cout << this->name << " is studying for " << hours << " hours. Knowledge level is now " << this->knowledgeLevel << " and energy level is " << this->energyLevel << "." << endl;
     }
 };
 
-// Main function
-int main() {
-    // Creating an array of Student objects
-    Student students[3] = {
-        Student("Alice", 100, 50),
-        Student("Bob", 90, 40),
-        Student("Carol", 80, 60)
-    };
+// Derived class - Teacher
+class Teacher : public Participant
+{
+private:
+    string subject;
 
-    // Interacting with the students
-    for (int i = 0; i < 3; i++) {
+public:
+    Teacher(string name = "Unnamed", int energyLevel = 100, string subject = "Unknown") : Participant(name, energyLevel)
+    {
+        this->subject = subject;
+    }
+
+    void teach()
+    {
+        this->energyLevel -= 10;
+        cout << this->name << " is teaching " << this->subject << ". Energy level is now " << this->energyLevel << "." << endl;
+    }
+};
+
+int main()
+{
+    // Dynamically creating an array of Student objects
+    Student* students = new Student[3] {
+        Student("Alice", 100, 50),
+        Student("Bob", 100, 60),
+        Student("Carol", 90, 70)};
+
+    // Dynamically creating an array of Teacher objects
+    Teacher* teachers = new Teacher[2] {
+        Teacher("Mr. Johnson", 80, "Mathematics"),
+        Teacher("Ms. Smith", 85, "English")};
+
+    // Interacting with the students and teachers
+    for (int i = 0; i < 3; i++)
+    {
         students[i].study(2);
         students[i].rest();
     }
+
+    for (int i = 0; i < 2; i++)
+    {
+        teachers[i].teach();
+        teachers[i].rest();
+    }
+
+    // Deallocating dynamically allocated memory
+    delete[] students;
+    delete[] teachers;
 
     return 0;
 }
