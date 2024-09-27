@@ -34,10 +34,19 @@ class Student : public Participant
 private:
     int knowledgeLevel;
 
+    // Static variable to track the number of students
+    static int studentCount;
+
 public:
     Student(string name = "Unnamed", int energyLevel = 100, int knowledgeLevel = 50) : Participant(name, energyLevel)
     {
         this->knowledgeLevel = knowledgeLevel;
+        studentCount++;  // Increment the static variable when a new student is created
+    }
+
+    ~Student() 
+    {
+        studentCount--;  // Decrement when a student is destroyed
     }
 
     void study(int hours)
@@ -46,7 +55,16 @@ public:
         this->energyLevel -= hours * 2;
         cout << this->name << " is studying for " << hours << " hours. Knowledge level is now " << this->knowledgeLevel << " and energy level is " << this->energyLevel << "." << endl;
     }
+
+    // Static method to get the total number of students
+    static int getStudentCount()
+    {
+        return studentCount;
+    }
 };
+
+// Initialize the static variable
+int Student::studentCount = 0;
 
 // Derived class - Teacher
 class Teacher : public Participant
@@ -54,10 +72,19 @@ class Teacher : public Participant
 private:
     string subject;
 
+    // Static variable to track the number of teachers
+    static int teacherCount;
+
 public:
     Teacher(string name = "Unnamed", int energyLevel = 100, string subject = "Unknown") : Participant(name, energyLevel)
     {
         this->subject = subject;
+        teacherCount++;  // Increment the static variable when a new teacher is created
+    }
+
+    ~Teacher() 
+    {
+        teacherCount--;  // Decrement when a teacher is destroyed
     }
 
     void teach()
@@ -65,19 +92,28 @@ public:
         this->energyLevel -= 10;
         cout << this->name << " is teaching " << this->subject << ". Energy level is now " << this->energyLevel << "." << endl;
     }
+
+    // Static method to get the total number of teachers
+    static int getTeacherCount()
+    {
+        return teacherCount;
+    }
 };
+
+// Initialize the static variable
+int Teacher::teacherCount = 0;
 
 int main()
 {
     // Dynamically creating an array of Student objects
-    Student* students = new Student[3];  // Dynamically allocate the array
-    students[0] = Student("Alice", 100, 50);  // Initialize each element
+    Student* students = new Student[3];
+    students[0] = Student("Alice", 100, 50);
     students[1] = Student("Bob", 100, 60);
     students[2] = Student("Carol", 90, 70);
 
     // Dynamically creating an array of Teacher objects
-    Teacher* teachers = new Teacher[2];  // Dynamically allocate the array
-    teachers[0] = Teacher("Mr. Johnson", 80, "Mathematics");  // Initialize each element
+    Teacher* teachers = new Teacher[2];
+    teachers[0] = Teacher("Mr. Johnson", 80, "Mathematics");
     teachers[1] = Teacher("Ms. Smith", 85, "English");
 
     // Interacting with the students and teachers
@@ -92,6 +128,10 @@ int main()
         teachers[i].teach();
         teachers[i].rest();
     }
+
+    // Display the total count of students and teachers
+    cout << "Total number of students: " << Student::getStudentCount() << endl;
+    cout << "Total number of teachers: " << Teacher::getTeacherCount() << endl;
 
     // Deallocating dynamically allocated memory
     delete[] students;
