@@ -69,14 +69,14 @@ public:
 
 int main()
 {
-    // Creating an array of Student objects
-    Student students[3] = {
+    // Dynamically creating an array of Student objects
+    Student* students = new Student[3] {
         Student("Alice", 100, 50),
         Student("Bob", 100, 60),
         Student("Carol", 90, 70)};
 
-    // Creating an array of Teacher objects
-    Teacher teachers[2] = {
+    // Dynamically creating an array of Teacher objects
+    Teacher* teachers = new Teacher[2] {
         Teacher("Mr. Johnson", 80, "Mathematics"),
         Teacher("Ms. Smith", 85, "English")};
 
@@ -92,6 +92,10 @@ int main()
         teachers[i].teach();
         teachers[i].rest();
     }
+
+    // Deallocating dynamically allocated memory
+    delete[] students;
+    delete[] teachers;
 
     return 0;
 }
