@@ -44,7 +44,7 @@ public:
         studentCount++;  // Increment the static variable when a new student is created
     }
 
-    ~Student() 
+    ~Student()
     {
         studentCount--;  // Decrement when a student is destroyed
     }
@@ -60,6 +60,12 @@ public:
     static int getStudentCount()
     {
         return studentCount;
+    }
+
+    // Static member function to display student information
+    static void displayStudentCount()
+    {
+        cout << "There are currently " << studentCount << " students." << endl;
     }
 };
 
@@ -82,7 +88,7 @@ public:
         teacherCount++;  // Increment the static variable when a new teacher is created
     }
 
-    ~Teacher() 
+    ~Teacher()
     {
         teacherCount--;  // Decrement when a teacher is destroyed
     }
@@ -97,6 +103,12 @@ public:
     static int getTeacherCount()
     {
         return teacherCount;
+    }
+
+    // Static member function to display teacher information
+    static void displayTeacherCount()
+    {
+        cout << "There are currently " << teacherCount << " teachers." << endl;
     }
 };
 
@@ -129,9 +141,9 @@ int main()
         teachers[i].rest();
     }
 
-    // Display the total count of students and teachers
-    cout << "Total number of students: " << Student::getStudentCount() << endl;
-    cout << "Total number of teachers: " << Teacher::getTeacherCount() << endl;
+    // Display the total count of students and teachers using static member functions
+    Student::displayStudentCount();
+    Teacher::displayTeacherCount();
 
     // Deallocating dynamically allocated memory
     delete[] students;
