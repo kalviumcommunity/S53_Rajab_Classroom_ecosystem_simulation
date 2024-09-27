@@ -70,15 +70,15 @@ public:
 int main()
 {
     // Dynamically creating an array of Student objects
-    Student* students = new Student[3] {
-        Student("Alice", 100, 50),
-        Student("Bob", 100, 60),
-        Student("Carol", 90, 70)};
+    Student* students = new Student[3];  // Dynamically allocate the array
+    students[0] = Student("Alice", 100, 50);  // Initialize each element
+    students[1] = Student("Bob", 100, 60);
+    students[2] = Student("Carol", 90, 70);
 
     // Dynamically creating an array of Teacher objects
-    Teacher* teachers = new Teacher[2] {
-        Teacher("Mr. Johnson", 80, "Mathematics"),
-        Teacher("Ms. Smith", 85, "English")};
+    Teacher* teachers = new Teacher[2];  // Dynamically allocate the array
+    teachers[0] = Teacher("Mr. Johnson", 80, "Mathematics");  // Initialize each element
+    teachers[1] = Teacher("Ms. Smith", 85, "English");
 
     // Interacting with the students and teachers
     for (int i = 0; i < 3; i++)
