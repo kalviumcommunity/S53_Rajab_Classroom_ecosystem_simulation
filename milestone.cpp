@@ -124,7 +124,7 @@ int main() {
         teachers[i].teach();
         teachers[i].rest();
     }
-
+// Deallocation
     delete[] students;
     delete[] teachers;
 
