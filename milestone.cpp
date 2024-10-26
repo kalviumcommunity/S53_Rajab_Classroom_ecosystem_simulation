@@ -5,8 +5,8 @@ using namespace std;
 // Base class
 class Participant {
 protected:
-    string name;
-    int energyLevel;
+    string name;          // Protected, accessible by derived classes
+    int energyLevel;      // Protected, accessible by derived classes
 
 public:
     Participant(string name = "Unnamed", int energyLevel = 100) {
@@ -19,29 +19,24 @@ public:
         cout << this->name << " is resting. Energy level is now " << this->energyLevel << "." << endl;
     }
 
-    // Accessor
+    // Public accessor and mutator for name
     string getName() const {
         return name;
     }
-
-    // Mutator
     void setName(const string& newName) {
         name = newName;
     }
 
+    // Public accessor for energy level (no mutator to control modification)
     int getEnergyLevel() const {
         return energyLevel;
-    }
-
-    void setEnergyLevel(int newEnergyLevel) {
-        energyLevel = newEnergyLevel;
     }
 };
 
 // Derived class - Student
 class Student : public Participant {
 private:
-    int knowledgeLevel;
+    int knowledgeLevel;  // Private, encapsulating direct access to knowledge level
 
 public:
     Student(string name = "Unnamed", int energyLevel = 100, int knowledgeLevel = 50)
@@ -49,28 +44,28 @@ public:
         this->knowledgeLevel = knowledgeLevel;
     }
 
-    // Accessor
+    // Public accessor and mutator for knowledge level
     int getKnowledgeLevel() const {
         return knowledgeLevel;
     }
-
-    // Mutator
     void setKnowledgeLevel(int newKnowledgeLevel) {
-        knowledgeLevel = newKnowledgeLevel;
+        if (newKnowledgeLevel >= 0) {  // Basic validation
+            knowledgeLevel = newKnowledgeLevel;
+        }
     }
 
     void study(int hours) {
-        this->knowledgeLevel += hours * 2;
-        this->energyLevel -= hours * 2;
-        cout << this->name << " is studying for " << hours << " hours. Knowledge level is now "
-             << this->knowledgeLevel << " and energy level is " << this->energyLevel << "." << endl;
+        knowledgeLevel += hours * 2;
+        energyLevel -= hours * 2;
+        cout << name << " is studying for " << hours << " hours. Knowledge level is now "
+             << knowledgeLevel << " and energy level is " << energyLevel << "." << endl;
     }
 };
 
 // Derived class - Teacher
 class Teacher : public Participant {
 private:
-    string subject;
+    string subject;  // Private, only accessible via get/set methods
 
 public:
     Teacher(string name = "Unnamed", int energyLevel = 100, string subject = "Unknown")
@@ -78,19 +73,17 @@ public:
         this->subject = subject;
     }
 
-    // Accessor
+    // Public accessor and mutator for subject
     string getSubject() const {
         return subject;
     }
-
-    // Mutator
     void setSubject(const string& newSubject) {
         subject = newSubject;
     }
 
     void teach() {
-        this->energyLevel -= 10;
-        cout << this->name << " is teaching " << this->subject << ". Energy level is now " << this->energyLevel << "." << endl;
+        energyLevel -= 10;
+        cout << name << " is teaching " << subject << ". Energy level is now " << energyLevel << "." << endl;
     }
 };
 
