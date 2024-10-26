@@ -5,13 +5,23 @@ using namespace std;
 // Base class
 class Participant {
 protected:
-    string name;
-    int energyLevel;
+    string name;          
+    int energyLevel;      
 
 public:
-    Participant(string name = "Unnamed", int energyLevel = 100) {
-        this->name = name;
-        this->energyLevel = energyLevel;
+    // Default Constructor
+    Participant(string name = "Unnamed", int energyLevel = 100) : name(name), energyLevel(energyLevel) {
+        cout << "Participant " << name << " created with energy level " << energyLevel << "." << endl;
+    }
+
+    // Copy Constructor
+    Participant(const Participant& other) : name(other.name), energyLevel(other.energyLevel) {
+        cout << "Copy of participant " << name << " created." << endl;
+    }
+
+    // Destructor
+    virtual ~Participant() {
+        cout << "Participant " << name << " destroyed." << endl;
     }
 
     void rest() {
@@ -19,22 +29,15 @@ public:
         cout << this->name << " is resting. Energy level is now " << this->energyLevel << "." << endl;
     }
 
-    // Accessor
     string getName() const {
         return name;
     }
-
-    // Mutator
     void setName(const string& newName) {
         name = newName;
     }
 
     int getEnergyLevel() const {
         return energyLevel;
-    }
-
-    void setEnergyLevel(int newEnergyLevel) {
-        energyLevel = newEnergyLevel;
     }
 };
 
@@ -44,26 +47,29 @@ private:
     int knowledgeLevel;
 
 public:
+    // Default Constructor
     Student(string name = "Unnamed", int energyLevel = 100, int knowledgeLevel = 50)
-        : Participant(name, energyLevel) {
-        this->knowledgeLevel = knowledgeLevel;
+        : Participant(name, energyLevel), knowledgeLevel(knowledgeLevel) {
+        cout << "Student " << name << " created with knowledge level " << knowledgeLevel << "." << endl;
     }
 
-    // Accessor
+    // Destructor
+    ~Student() override {
+        cout << "Student " << name << " destroyed." << endl;
+    }
+
     int getKnowledgeLevel() const {
         return knowledgeLevel;
     }
-
-    // Mutator
     void setKnowledgeLevel(int newKnowledgeLevel) {
         knowledgeLevel = newKnowledgeLevel;
     }
 
     void study(int hours) {
-        this->knowledgeLevel += hours * 2;
-        this->energyLevel -= hours * 2;
-        cout << this->name << " is studying for " << hours << " hours. Knowledge level is now "
-             << this->knowledgeLevel << " and energy level is " << this->energyLevel << "." << endl;
+        knowledgeLevel += hours * 2;
+        energyLevel -= hours * 2;
+        cout << name << " is studying for " << hours << " hours. Knowledge level is now "
+             << knowledgeLevel << " and energy level is " << energyLevel << "." << endl;
     }
 };
 
@@ -73,40 +79,42 @@ private:
     string subject;
 
 public:
+    // Default Constructor
     Teacher(string name = "Unnamed", int energyLevel = 100, string subject = "Unknown")
-        : Participant(name, energyLevel) {
-        this->subject = subject;
+        : Participant(name, energyLevel), subject(subject) {
+        cout << "Teacher " << name << " created with subject " << subject << "." << endl;
     }
 
-    // Accessor
+    // Destructor
+    ~Teacher() override {
+        cout << "Teacher " << name << " destroyed." << endl;
+    }
+
     string getSubject() const {
         return subject;
     }
-
-    // Mutator
     void setSubject(const string& newSubject) {
         subject = newSubject;
     }
 
     void teach() {
-        this->energyLevel -= 10;
-        cout << this->name << " is teaching " << this->subject << ". Energy level is now " << this->energyLevel << "." << endl;
+        energyLevel -= 10;
+        cout << name << " is teaching " << subject << ". Energy level is now " << energyLevel << "." << endl;
     }
 };
 
 int main() {
-    // Dynamically creating an array of Student objects
-    Student* students = new Student[3];
-    students[0] = Student("Alice", 100, 50);
-    students[1] = Student("Bob", 100, 60);
-    students[2] = Student("Carol", 90, 70);
+    Student* students = new Student[3]{
+        Student("Alice", 100, 50),
+        Student("Bob", 100, 60),
+        Student("Carol", 90, 70)
+    };
 
-    // Dynamically creating an array of Teacher objects
-    Teacher* teachers = new Teacher[2];
-    teachers[0] = Teacher("Mr. Johnson", 80, "Mathematics");
-    teachers[1] = Teacher("Ms. Smith", 85, "English");
+    Teacher* teachers = new Teacher[2]{
+        Teacher("Mr. Johnson", 80, "Mathematics"),
+        Teacher("Ms. Smith", 85, "English")
+    };
 
-    // Interacting with the students and teachers
     for (int i = 0; i < 3; i++) {
         students[i].study(2);
         students[i].rest();
@@ -117,7 +125,6 @@ int main() {
         teachers[i].rest();
     }
 
-    // Deallocating dynamically allocated memory
     delete[] students;
     delete[] teachers;
 
