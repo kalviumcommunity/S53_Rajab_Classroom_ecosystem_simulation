@@ -54,7 +54,7 @@ public:
     }
 
     // Destructor
-    ~Student() override {
+    ~Student() {
         cout << "Student " << name << " destroyed." << endl;
     }
 
@@ -86,7 +86,7 @@ public:
     }
 
     // Destructor
-    ~Teacher() override {
+    ~Teacher() {
         cout << "Teacher " << name << " destroyed." << endl;
     }
 
@@ -104,16 +104,16 @@ public:
 };
 
 int main() {
-    Student* students = new Student[3]{
-        Student("Alice", 100, 50),
-        Student("Bob", 100, 60),
-        Student("Carol", 90, 70)
-    };
+    // Creating an array of Student objects using individual initializations
+    Student* students = new Student[3];
+    students[0] = Student("Alice", 100, 50);
+    students[1] = Student("Bob", 100, 60);
+    students[2] = Student("Carol", 90, 70);
 
-    Teacher* teachers = new Teacher[2]{
-        Teacher("Mr. Johnson", 80, "Mathematics"),
-        Teacher("Ms. Smith", 85, "English")
-    };
+    // Creating an array of Teacher objects using individual initializations
+    Teacher* teachers = new Teacher[2];
+    teachers[0] = Teacher("Mr. Johnson", 80, "Mathematics");
+    teachers[1] = Teacher("Ms. Smith", 85, "English");
 
     for (int i = 0; i < 3; i++) {
         students[i].study(2);
@@ -124,7 +124,8 @@ int main() {
         teachers[i].teach();
         teachers[i].rest();
     }
-// Deallocation
+
+    // Deallocating dynamically allocated memory
     delete[] students;
     delete[] teachers;
 
