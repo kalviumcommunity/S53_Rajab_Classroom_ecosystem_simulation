@@ -5,13 +5,23 @@ using namespace std;
 // Base class
 class Participant {
 protected:
-    string name;          // Protected, accessible by derived classes
-    int energyLevel;      // Protected, accessible by derived classes
+    string name;          
+    int energyLevel;      
 
 public:
-    Participant(string name = "Unnamed", int energyLevel = 100) {
-        this->name = name;
-        this->energyLevel = energyLevel;
+    // Default Constructor
+    Participant(string name = "Unnamed", int energyLevel = 100) : name(name), energyLevel(energyLevel) {
+        cout << "Participant " << name << " created with energy level " << energyLevel << "." << endl;
+    }
+
+    // Copy Constructor
+    Participant(const Participant& other) : name(other.name), energyLevel(other.energyLevel) {
+        cout << "Copy of participant " << name << " created." << endl;
+    }
+
+    // Destructor
+    virtual ~Participant() {
+        cout << "Participant " << name << " destroyed." << endl;
     }
 
     void rest() {
@@ -19,7 +29,6 @@ public:
         cout << this->name << " is resting. Energy level is now " << this->energyLevel << "." << endl;
     }
 
-    // Public accessor and mutator for name
     string getName() const {
         return name;
     }
@@ -27,7 +36,6 @@ public:
         name = newName;
     }
 
-    // Public accessor for energy level (no mutator to control modification)
     int getEnergyLevel() const {
         return energyLevel;
     }
@@ -36,22 +44,25 @@ public:
 // Derived class - Student
 class Student : public Participant {
 private:
-    int knowledgeLevel;  // Private, encapsulating direct access to knowledge level
+    int knowledgeLevel;
 
 public:
+    // Default Constructor
     Student(string name = "Unnamed", int energyLevel = 100, int knowledgeLevel = 50)
-        : Participant(name, energyLevel) {
-        this->knowledgeLevel = knowledgeLevel;
+        : Participant(name, energyLevel), knowledgeLevel(knowledgeLevel) {
+        cout << "Student " << name << " created with knowledge level " << knowledgeLevel << "." << endl;
     }
 
-    // Public accessor and mutator for knowledge level
+    // Destructor
+    ~Student() override {
+        cout << "Student " << name << " destroyed." << endl;
+    }
+
     int getKnowledgeLevel() const {
         return knowledgeLevel;
     }
     void setKnowledgeLevel(int newKnowledgeLevel) {
-        if (newKnowledgeLevel >= 0) {  // Basic validation
-            knowledgeLevel = newKnowledgeLevel;
-        }
+        knowledgeLevel = newKnowledgeLevel;
     }
 
     void study(int hours) {
@@ -65,15 +76,20 @@ public:
 // Derived class - Teacher
 class Teacher : public Participant {
 private:
-    string subject;  // Private, only accessible via get/set methods
+    string subject;
 
 public:
+    // Default Constructor
     Teacher(string name = "Unnamed", int energyLevel = 100, string subject = "Unknown")
-        : Participant(name, energyLevel) {
-        this->subject = subject;
+        : Participant(name, energyLevel), subject(subject) {
+        cout << "Teacher " << name << " created with subject " << subject << "." << endl;
     }
 
-    // Public accessor and mutator for subject
+    // Destructor
+    ~Teacher() override {
+        cout << "Teacher " << name << " destroyed." << endl;
+    }
+
     string getSubject() const {
         return subject;
     }
@@ -88,18 +104,17 @@ public:
 };
 
 int main() {
-    // Dynamically creating an array of Student objects
-    Student* students = new Student[3];
-    students[0] = Student("Alice", 100, 50);
-    students[1] = Student("Bob", 100, 60);
-    students[2] = Student("Carol", 90, 70);
+    Student* students = new Student[3]{
+        Student("Alice", 100, 50),
+        Student("Bob", 100, 60),
+        Student("Carol", 90, 70)
+    };
 
-    // Dynamically creating an array of Teacher objects
-    Teacher* teachers = new Teacher[2];
-    teachers[0] = Teacher("Mr. Johnson", 80, "Mathematics");
-    teachers[1] = Teacher("Ms. Smith", 85, "English");
+    Teacher* teachers = new Teacher[2]{
+        Teacher("Mr. Johnson", 80, "Mathematics"),
+        Teacher("Ms. Smith", 85, "English")
+    };
 
-    // Interacting with the students and teachers
     for (int i = 0; i < 3; i++) {
         students[i].study(2);
         students[i].rest();
@@ -110,7 +125,6 @@ int main() {
         teachers[i].rest();
     }
 
-    // Deallocating dynamically allocated memory
     delete[] students;
     delete[] teachers;
 
