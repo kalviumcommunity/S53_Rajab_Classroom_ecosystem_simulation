@@ -2,20 +2,22 @@
 #include <string>
 using namespace std;
 
-// Base class
+// Base class - Participant
 class Participant {
 protected:
-    string name;          
-    int energyLevel;      
+    string name;
+    int energyLevel;
 
 public:
     // Default Constructor
-    Participant(string name = "Unnamed", int energyLevel = 100) : name(name), energyLevel(energyLevel) {
+    Participant(string name = "Unnamed", int energyLevel = 100) 
+        : name(name), energyLevel(energyLevel) {
         cout << "Participant " << name << " created with energy level " << energyLevel << "." << endl;
     }
 
     // Copy Constructor
-    Participant(const Participant& other) : name(other.name), energyLevel(other.energyLevel) {
+    Participant(const Participant& other) 
+        : name(other.name), energyLevel(other.energyLevel) {
         cout << "Copy of participant " << name << " created." << endl;
     }
 
@@ -25,8 +27,8 @@ public:
     }
 
     void rest() {
-        this->energyLevel += 10;
-        cout << this->name << " is resting. Energy level is now " << this->energyLevel << "." << endl;
+        energyLevel += 10;
+        cout << name << " is resting. Energy level is now " << energyLevel << "." << endl;
     }
 
     string getName() const {
@@ -41,8 +43,8 @@ public:
     }
 };
 
-// Derived class - Student
-class Student : public Participant {
+// Derived class - Student (Single Inheritance with virtual base)
+class Student : virtual public Participant {
 private:
     int knowledgeLevel;
 
@@ -73,8 +75,8 @@ public:
     }
 };
 
-// Derived class - Teacher
-class Teacher : public Participant {
+// Derived class - Teacher (Single Inheritance with virtual base)
+class Teacher : virtual public Participant {
 private:
     string subject;
 
@@ -103,18 +105,41 @@ public:
     }
 };
 
+// Derived class - AssistantTeacher (Multiple Inheritance)
+class AssistantTeacher : public Student, public Teacher {
+public:
+    AssistantTeacher(string name = "Unnamed", int energyLevel = 90, int knowledgeLevel = 60, string subject = "Assistant")
+        : Participant(name, energyLevel), Student(name, energyLevel, knowledgeLevel), Teacher(name, energyLevel, subject) {
+        cout << "Assistant Teacher " << name << " created, who is both a student and a teacher." << endl;
+    }
+
+    // Destructor
+    ~AssistantTeacher() {
+        cout << "Assistant Teacher " << name << " destroyed." << endl;
+    }
+
+    void assist() {
+        energyLevel -= 5;
+        cout << name << " is assisting in " << getSubject() << ". Energy level is now " << energyLevel << "." << endl;
+    }
+};
+
 int main() {
-    // Creating an array of Student objects using individual initializations
+    // Creating and using Student objects
     Student* students = new Student[3];
     students[0] = Student("Alice", 100, 50);
     students[1] = Student("Bob", 100, 60);
     students[2] = Student("Carol", 90, 70);
 
-    // Creating an array of Teacher objects using individual initializations
+    // Creating and using Teacher objects
     Teacher* teachers = new Teacher[2];
     teachers[0] = Teacher("Mr. Johnson", 80, "Mathematics");
     teachers[1] = Teacher("Ms. Smith", 85, "English");
 
+    // Demonstrating an AssistantTeacher
+    AssistantTeacher assistant("John Doe", 90, 60, "Science");
+
+    // Performing actions
     for (int i = 0; i < 3; i++) {
         students[i].study(2);
         students[i].rest();
@@ -125,7 +150,10 @@ int main() {
         teachers[i].rest();
     }
 
-    // Deallocating dynamically allocated memory
+    assistant.assist();
+    assistant.rest();
+
+    // Deallocating memory
     delete[] students;
     delete[] teachers;
 
