@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-// Base class - Participant
+// Abstract Base Class - Participant
 class Participant {
 protected:
     string name;
@@ -21,14 +21,13 @@ public:
         cout << "Copy of participant " << name << " created." << endl;
     }
 
-    // Destructor
+    // Virtual Destructor
     virtual ~Participant() {
         cout << "Participant " << name << " destroyed." << endl;
     }
 
-    virtual void performAction() const { // Virtual function for polymorphism
-        cout << name << " is taking a generic action." << endl;
-    }
+    // Pure Virtual Function (Abstract Method)
+    virtual void performAction() const = 0;
 
     void rest() {
         energyLevel += 10;
@@ -47,7 +46,7 @@ public:
     }
 };
 
-// Derived class - Student (Single Inheritance with virtual base)
+// Derived class - Student
 class Student : virtual public Participant {
 private:
     int knowledgeLevel;
@@ -78,12 +77,12 @@ public:
              << knowledgeLevel << " and energy level is " << energyLevel << "." << endl;
     }
 
-    void performAction() const override { // Overriding virtual function
+    void performAction() const override {
         cout << name << " is studying to improve knowledge." << endl;
     }
 };
 
-// Derived class - Teacher (Single Inheritance with virtual base)
+// Derived class - Teacher
 class Teacher : virtual public Participant {
 private:
     string subject;
@@ -112,7 +111,7 @@ public:
         cout << name << " is teaching " << subject << ". Energy level is now " << energyLevel << "." << endl;
     }
 
-    void performAction() const override { // Overriding virtual function
+    void performAction() const override {
         cout << name << " is teaching the subject: " << subject << "." << endl;
     }
 };
@@ -136,13 +135,12 @@ public:
     }
 
     void performAction() const override {
-         // Overriding virtual function
-        cout << name << " is assisting and balancing teaching and learning." << endl;
+        cout << name << " is assisting, teaching, and learning simultaneously." << endl;
     }
 };
 
 int main() {
-    // Demonstrating Polymorphism with Participant pointers
+    // Demonstrating Polymorphism
     Participant* participants[3];
 
     participants[0] = new Student("Alice", 100, 50);
