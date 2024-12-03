@@ -68,7 +68,7 @@ public:
 };
 
 // Derived class - Student
-class Student : virtual public Participant {
+class Student : public Participant {
 private:
     KnowledgeManager knowledgeManager;
 
@@ -90,7 +90,7 @@ public:
 };
 
 // Derived class - Teacher
-class Teacher : virtual public Participant {
+class Teacher : public Participant {
 private:
     string subject;
 
@@ -114,21 +114,20 @@ public:
     }
 };
 
-// Derived class - AssistantTeacher
-class AssistantTeacher : public Student, public Teacher {
+// Derived class - Researcher (New Class to Demonstrate Extension)
+class Researcher : public Participant {
 public:
-    AssistantTeacher(string name = "Unnamed", int energyLevel = 90, int knowledgeLevel = 60, string subject = "Assistant")
-        : Participant(name, energyLevel), Student(name, energyLevel, knowledgeLevel), Teacher(name, energyLevel, subject) {
-        cout << "Assistant Teacher " << name << " created, who is both a student and a teacher." << endl;
+    Researcher(string name, int energyLevel = 100) : Participant(name, energyLevel) {
+        cout << "Researcher " << name << " created." << endl;
     }
 
-    void assist() {
-        energyManager.decreaseEnergy(5);
-        cout << name << " is assisting in " << Teacher::getSubject() << "." << endl;
+    void performResearch() {
+        energyManager.decreaseEnergy(15);
+        cout << name << " is conducting research. Energy level is now " << energyManager.getEnergyLevel() << "." << endl;
     }
 
-    void performAction() const {
-        cout << name << " is assisting, teaching, and learning simultaneously." << endl;
+    void performAction() const  {
+        cout << name << " is researching to find new knowledge." << endl;
     }
 };
 
@@ -137,7 +136,7 @@ int main() {
 
     participants[0] = new Student("Alice", 100, 50);
     participants[1] = new Teacher("Mr. Johnson", 80, "Mathematics");
-    participants[2] = new AssistantTeacher("John Doe", 90, 60, "Science");
+    participants[2] = new Researcher("Dr. Smith", 90);
 
     cout << "\n--- Demonstrating Polymorphism ---\n";
     for (int i = 0; i < 3; i++) {
